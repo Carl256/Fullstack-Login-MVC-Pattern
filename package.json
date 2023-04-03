@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/Carl256/Fullstack-Login-MVC-Pattern/issues"
   },
-  "homepage": "https://github.com/Carl256/Fullstack-Login-MVC-Pattern#readme"
+  "homepage": "https://github.com/Carl256/Fullstack-Login-MVC-Pattern#readme",
+  "devDependencies": {
+    "concurrently": "^8.0.1"
+  }
 }

@@ -1,27 +1,22 @@
-// controllers/userController.ts
 import { Request, Response } from 'express';
-import User from '../models/user';
-import bcrypt from 'bcryptjs';
+import userService from '../services/userService';
+import bcrypt from 'bcrypt';
 
 const register = async (req: Request, res: Response) => {
   const { email, password } = req.body;
 
   try {
     // Check if user already exists
-    let user = await User.findOne({ email });
-
-    if (user) {
+    const userExists = await userService.findUserByEmail(email);
+    if (userExists) {
       return res.status(400).json({ msg: 'User already exists' });
     }
 
-    // Create new user
-    user = new User({ email, password });
-
-    // Hash password before saving
-    const salt = await bcrypt.genSalt(10);
-    user.password = await bcrypt.hash(password, salt);
-
-    await user.save();
+    // Register user
+    const registered = await userService.registerUser(email, password);
+    if (!registered) {
+      throw new Error('Failed to register user');
+    }
 
     return res.json({ msg: 'User registered successfully' });
   } catch (err) {
@@ -36,51 +31,30 @@ const login = async (req: Request, res: Response) => {
   const { email, password } = req.body;
 
   try {
-    // Check if user exists
-    let user = await User.findOne({ email });
-
+    // Find user by email
+    const user = await userService.findUserByEmail(email);
     if (!user) {
       return res.status(400).json({ msg: 'Invalid credentials' });
     }
 
-    // Check if password is correct
-    const isMatch = await bcrypt.compare(password, user.password);
-
-    if (!isMatch) {
+    // Check password
+    const passwordMatch = await bcrypt.compare(password, user.password);
+    if (!passwordMatch) {
       return res.status(400).json({ msg: 'Invalid credentials' });
     }
 
-    // Return JWT token
-    const token = 'dummy_token'; // Replace with actual JWT implementation
+    // TODO: Return JWT token
+    const token = 'dummy_token';
     res.json({ token });
   } catch (err) {
     if(err instanceof Error){
-    console.error(err.message);
-    }
+      console.error(err.message);
+   }
     return res.status(500).json({ msg: 'Server error' });
   }
 };
 
-// const getProfile = async (req: Request, res: Response) => {
-//   try {
-//     // Find user by ID and exclude password field from results
-//     const user = await User.findById(req.user.id).select('-password');
-
-//     if (!user) {
-//       return res.status(404).json({ msg: 'User not found' });
-//     }
-
-//     return res.json(user);
-//   } catch (err) {
-//     if(err instanceof Error){
-//     console.error(err.message);
-//     }
-//     return res.status(500).json({ msg: 'Server error' });
-//   }
-// };
-
 export default {
   register,
   login,
-  // getProfile,
 };

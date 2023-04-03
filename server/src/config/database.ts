@@ -1,22 +1,18 @@
-
-// config/database.ts
 import mongoose from 'mongoose';
+import { config } from "./config.js";
+
+console.log('MONGO_URI:', config.mongo.url);
 
 const connectDB = async () => {
   try {
-    await mongoose.connect(process.env.MONGODB_URI!);
+    await mongoose.connect( config.mongo.url);
     console.log('MongoDB Connected');
   } catch (err) {
-    if (err instanceof Error) {
-    console.error(err.message);
+    if(err instanceof Error){
+        console.error(err.message);
+     }
     process.exit(1);
-    }
   }
 };
 
-mongoose.connection.on('error', err => {
-  console.error('MongoDB connection error:', err);
-});
-
 export default connectDB;
-
