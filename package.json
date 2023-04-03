@@ -1,0 +1,19 @@
+{
+  "name": "fullstack-login-mvc-pattern",
+  "version": "1.0.0",
+  "description": "fullstack login application ",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Carl256/Fullstack-Login-MVC-Pattern.git"
+  },
+  "author": "Carl256",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Carl256/Fullstack-Login-MVC-Pattern/issues"
+  },
+  "homepage": "https://github.com/Carl256/Fullstack-Login-MVC-Pattern#readme"
+}
