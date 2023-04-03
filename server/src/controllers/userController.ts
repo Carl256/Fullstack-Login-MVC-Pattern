@@ -61,26 +61,26 @@ const login = async (req: Request, res: Response) => {
   }
 };
 
-const getProfile = async (req: Request, res: Response) => {
-  try {
-    // Find user by ID and exclude password field from results
-    const user = await User.findById(req.user.id).select('-password');
+// const getProfile = async (req: Request, res: Response) => {
+//   try {
+//     // Find user by ID and exclude password field from results
+//     const user = await User.findById(req.user.id).select('-password');
 
-    if (!user) {
-      return res.status(404).json({ msg: 'User not found' });
-    }
+//     if (!user) {
+//       return res.status(404).json({ msg: 'User not found' });
+//     }
 
-    return res.json(user);
-  } catch (err) {
-    if(err instanceof Error){
-    console.error(err.message);
-    }
-    return res.status(500).json({ msg: 'Server error' });
-  }
-};
+//     return res.json(user);
+//   } catch (err) {
+//     if(err instanceof Error){
+//     console.error(err.message);
+//     }
+//     return res.status(500).json({ msg: 'Server error' });
+//   }
+// };
 
 export default {
   register,
   login,
-  getProfile,
+  // getProfile,
 };
