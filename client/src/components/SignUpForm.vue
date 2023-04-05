@@ -49,6 +49,7 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 
+
 export default defineComponent({
   name: "SignUpForm",
   data() {
@@ -59,6 +60,7 @@ export default defineComponent({
     };
   },
 
+
   methods: {
     handleSubmit() {
       const data = {
@@ -66,20 +68,14 @@ export default defineComponent({
         password: this.password,
         confirmPassword: this.confirmPassword,
       };
-      fetch("http://localhost:3000/sign-up", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          console.log("Success:", data);
-        })
-        .catch((error) => {
-          console.error("Error:", error);
-        });
+
+      // if the confirm password is not the same as the password throw an error and return an empty password field
+      if (this.password !== this.confirmPassword) {
+        alert("Passwords do not match");
+        this.password = "";
+        this.confirmPassword = "";
+        return;
+      }
     },
   },
 });

@@ -1,4 +1,4 @@
-const UserModel = require('../models/user');
+const User = require('../models/user');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
@@ -19,8 +19,8 @@ exports.login = async (email, password) => {
 
 exports.signup = async (userData) => {
   try {
-    const { email, password, username } = userData;
-    const user = await User.create({ email, password, username });
+    const { email, password,  } = userData;
+    const user = await User.create({ email, password});
     return user;
   } catch (err) {
     console.error(err);
@@ -29,4 +29,18 @@ exports.signup = async (userData) => {
 };
 
 
-
+exports.logout = async (req, res) => {
+  try {
+    // Get the token from the request header
+    const token = req.header('Authorization').replace('Bearer ', '');
+    
+    // Verify and invalidate the token
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    decoded.exp = 0;
+    
+    // Send a response indicating successful logout
+    res.status(200).send('Logout successful');
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+};
