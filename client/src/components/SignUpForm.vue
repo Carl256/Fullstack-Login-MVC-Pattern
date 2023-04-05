@@ -37,7 +37,7 @@
                 required
               />
             </div>
-            <button class="form__button" type="submit">Sign Up</button>
+            <button class="form__button" type="submit" :click="handleSubmit">Sign Up</button>
           </form>
         </div>
       </div>
@@ -58,9 +58,28 @@ export default defineComponent({
       confirmPassword: "",
     };
   },
+
   methods: {
     handleSubmit() {
-      // handle form submission
+      const data = {
+        email: this.email,
+        password: this.password,
+        confirmPassword: this.confirmPassword,
+      };
+      fetch("http://localhost:3000/sign-up", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("Success:", data);
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
     },
   },
 });
