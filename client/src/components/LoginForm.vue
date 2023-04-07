@@ -3,7 +3,7 @@
       <div class="container__wrapper">
         <div class="card card--white">
             <div class="card__content">
-            <form class="form">
+            <form class="form" @submit="handleSubmit">
                 <h1 class="form__title">App Name Login</h1>
               <div class="form__field">
                 <label class="form__label" for="email">Email</label>
@@ -54,8 +54,28 @@ export default {
     };
   },
   methods: {
-    handleSubmit() {
-      // handle login form submit
+    handleSubmit(e: Event) {
+      e.preventDefault();
+      if(this.email && this.password) {
+        // make a post request to the server using fetch
+        fetch('http://localhost:3000/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            email: this.email,
+            password: this.password,
+          }),
+        })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log('Success:', data);
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+        });
+      }
     },
 
     openForgotPassword() {

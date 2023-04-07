@@ -15,6 +15,10 @@ const routes = [
     component: LoginForm,
   },
   {
+    path: '/login',
+    component: LoginForm,
+  },
+  {
     path: '/forgot-password',
     component: ForgotPassword,
   },

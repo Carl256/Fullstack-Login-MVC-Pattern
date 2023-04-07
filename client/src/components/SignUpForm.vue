@@ -3,7 +3,7 @@
     <div class="container__wrapper">
       <div class="card card--white">
         <div class="card__content">
-          <form class="form" @submit.prevent="handleSubmit">
+          <form class="form" @submit="handleSubmit">
             <h1 class="form__title">Create Account</h1>
             <div class="form__field">
               <label class="form__label" for="email">Email</label>
@@ -37,7 +37,10 @@
                 required
               />
             </div>
-            <button class="form__button" type="submit" :click="handleSubmit">Sign Up</button>
+
+            <button class="form__button" type="submit">
+              Sign Up
+            </button>
           </form>
         </div>
       </div>
@@ -49,7 +52,6 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 
-
 export default defineComponent({
   name: "SignUpForm",
   data() {
@@ -60,21 +62,42 @@ export default defineComponent({
     };
   },
 
-
   methods: {
-    handleSubmit() {
+    
+    handleSubmit(e: Event ) {
       const data = {
         email: this.email,
         password: this.password,
         confirmPassword: this.confirmPassword,
       };
 
-      // if the confirm password is not the same as the password throw an error and return an empty password field
+      e.preventDefault();
+      
+      // check if the passwords match
       if (this.password !== this.confirmPassword) {
         alert("Passwords do not match");
-        this.password = "";
-        this.confirmPassword = "";
-        return;
+      }else {
+        // make a post request to the server using fetch
+        fetch("http://localhost:3000/signup", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        })
+        // if the request is created successfully, redirect to the login page
+          .then((res) => {
+            if (res.status === 201) {
+              alert("Account created successfully");
+              this.$router.push("/login");
+            }
+          })
+          .then((data) => {
+            console.log(data);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
       }
     },
   },
