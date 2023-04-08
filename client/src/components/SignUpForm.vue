@@ -38,9 +38,7 @@
               />
             </div>
 
-            <button class="form__button" type="submit">
-              Sign Up
-            </button>
+            <button class="form__button" type="submit">Sign Up</button>
           </form>
         </div>
       </div>
@@ -63,8 +61,7 @@ export default defineComponent({
   },
 
   methods: {
-    
-    handleSubmit(e: Event ) {
+    handleSubmit(e: Event) {
       const data = {
         email: this.email,
         password: this.password,
@@ -72,11 +69,11 @@ export default defineComponent({
       };
 
       e.preventDefault();
-      
+
       // check if the passwords match
       if (this.password !== this.confirmPassword) {
         alert("Passwords do not match");
-      }else {
+      } else {
         // make a post request to the server using fetch
         fetch("http://localhost:3000/signup", {
           method: "POST",
@@ -85,7 +82,7 @@ export default defineComponent({
           },
           body: JSON.stringify(data),
         })
-        // if the request is created successfully, redirect to the login page
+          // if the request is created successfully, redirect to the login page
           .then((res) => {
             if (res.status === 201) {
               alert("Account created successfully");

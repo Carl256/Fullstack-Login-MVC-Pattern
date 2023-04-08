@@ -3,13 +3,13 @@ const userService = require('../services/userService');
 // destructure the functions from userService
 const {login, signup } = userService
 
-exports.login = async (req, res) => {
+exports.login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
     const token = await login(email, password);
     res.status(200).json({ token });
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    next(error);
   }
 };
 

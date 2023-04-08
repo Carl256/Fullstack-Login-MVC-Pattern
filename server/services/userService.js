@@ -1,22 +1,23 @@
 const User = require('../models/user');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const UserError = require('../services/errorHandlerService');
 
 exports.login = async (email, password) => {
   try {
     const user = await User.findOne({ email });
-    if (!user) throw new Error('User not found');
+    if (!user) throw new UserError('User not found', 404);
 
     const passwordMatch = await bcrypt.compare(password, user.password);
-    if (!passwordMatch) throw new Error('Invalid password');
+    if (!passwordMatch) throw new UserError('Invalid password', 401);
     
     if(user){
       const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-      console.log("logged in successfully");
+      console.log("logged in successfully", );
       return token;
     }
   } catch (error) {
-    throw new Error(error.message);
+    throw new UserError(error.message);
   }
 };
 
