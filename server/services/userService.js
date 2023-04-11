@@ -38,7 +38,7 @@ exports.logout = async (req, res) => {
     const token = req.header('Authorization').replace('Bearer ', '');
 
     // Verify and invalidate the token
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(token, process.env.JWT_REFRESH_SECRET);
     decoded.exp = 0;
 
     // Send a response indicating successful logout

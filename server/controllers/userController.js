@@ -22,3 +22,13 @@ exports.signup = async (req, res) => {
     }
   };
 
+exports.logout = (req, res) => {
+  try {
+    res.clearCookie('token');
+    res.status(200).json({ message: 'User logged out successfully' });
+  }
+  catch (err) {
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
