@@ -5,11 +5,13 @@ const { AuthErrors } = require("../../utils/errorHandlers/authErrors");
 const { loginSanitizationRules } = require("../sanitazation/sanitizeInput");
 const { validationResult } = require("express-validator");
 
-
 // Generate a JWT token for the user
 const generateToken = (user) => {
   // logic to generate JWT token for authenticated user
-  const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: "15m", algorithm: "HS256"});
+  const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
+    expiresIn: "15m",
+    algorithm: "HS256",
+  });
   return token;
 };
 
@@ -39,10 +41,10 @@ exports.authenticateUserLogin = async (req, res, next) => {
 
     // return the information including token as JSON
     const token = generateToken(user);
-    return res.status(200).json({ token, user });
+    return res.status(200).json({ token });
   } catch (error) {
-    // handle errors
-    return next(error);
+    next(error);
+    return;
   }
 };
 
@@ -78,15 +80,14 @@ exports.authenticateUserSignup = async (req, res, next) => {
       await user.save();
 
       // retun success message
-      return res.status(201).json({ success: true, message: "User registered successfully" });
-
+      return res
+        .status(201)
+        .json({ success: true, message: "User registered successfully" });
     }
-  }catch (error) {
+  } catch (error) {
     // handle errors
     return next(error);
   }
 };
-
-
 
 exports.sanitizeLoginInput = loginSanitizationRules();
