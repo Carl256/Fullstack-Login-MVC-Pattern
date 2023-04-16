@@ -1,6 +1,7 @@
 # Fullstack-Login App 
 Frontend 
 - Vue 
+- Typescript
 - vite
 - vue-router
 - Scss
