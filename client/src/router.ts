@@ -4,6 +4,7 @@ import ForgotPassword from '@/components/ForgotPassword.vue';
 import SignUpForm from '@/components/SignUpForm.vue';
 
 import HomeView from '@/views/HomeView.vue';
+import UserView from '@/views/UserView.vue';
 
 const routes = [
     // {
@@ -26,6 +27,10 @@ const routes = [
     path: '/sign-up',
     component: SignUpForm,
   },
+  {
+    path: '/dashboard',
+    component: UserView,
+  }
 ];
 
 const router = createRouter({

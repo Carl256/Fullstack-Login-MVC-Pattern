@@ -72,6 +72,21 @@ body {
   padding: 1rem 1rem 2rem 1rem;
 }
 
+.links {
+  text-decoration: none;
+  background-color: transparent;
+  margin-top: 16px;
+  a {
+    color: #3a5878;
+    text-decoration: none;
+    background-color: transparent;
+    &:hover {
+      color: #0056b3;
+      text-decoration: underline;
+    }
+  }
+}
+
 @media screen and (min-width: 768px) {
   .card {
     padding: 2rem;

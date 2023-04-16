@@ -37,20 +37,6 @@
 .navbar__right router-link {
   margin-left: 16px;
 }
-.links {
-  text-decoration: none;
-  background-color: transparent;
-  margin-top: 16px;
 
-  a {
-    color: #3a5878;
-    text-decoration: none;
-    background-color: transparent;
-    &:hover {
-      color: #0056b3;
-      text-decoration: underline;
-    }
-  }
-}
 </style>
   
