@@ -30,7 +30,7 @@ exports.authenticateUserLogin = async (req, res, next) => {
 
     // Check if user exists
     if (!user) {
-      next(AuthErrors.userNotFound("User not found"));
+      throw AuthErrors.userNotFound("User not found");
     }
 
     // Check if user's password matches hashed password in database
