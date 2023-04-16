@@ -1,5 +1,5 @@
 # Fullstack-Login App 
-Frontend 
+<strong>Frontend</strong>
 - Vue 
 - Typescript
 - vite
@@ -8,7 +8,7 @@ Frontend
 - Bem
 - Css
 
-Backend
+<strong>Backend</strong>
 - Node
 - Express
 - Mongodb
