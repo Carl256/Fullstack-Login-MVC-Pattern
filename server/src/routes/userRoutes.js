@@ -8,9 +8,13 @@ const { login, signup, logout } = userController;
 
 const { handleLoginError, handleSignupError } = errorHanderMiddleware;
 
-router.post('/login', sanitizeLoginInput, handleLoginError, login);
-router.post('/signup', handleSignupError, signup);
+router.post('/login', sanitizeLoginInput, login);
+router.post('/signup', signup);
 // router.post('/logout', logout);
+
+// // use the error handler middleware
+router.use(handleLoginError, handleSignupError);
+
 
 
 module.exports = router;
