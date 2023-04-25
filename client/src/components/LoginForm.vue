@@ -11,7 +11,7 @@
                 class="form__input"
                 type="email"
                 id="email"
-                v-model="email"
+                v-model="formData.email"
                 required
               />
             </div>
@@ -21,7 +21,7 @@
                 class="form__input"
                 type="password"
                 id="password"
-                v-model="password"
+                v-model="formData.password"
                 required
               />
             </div>
@@ -47,41 +47,63 @@
 export default {
   data() {
     return {
-      email: "",
-      password: "",
+      formData: {
+        email: "",
+        password: "",
+      },
+      errors:[]
     };
   },
   methods: {
     handleSubmit(e: Event) {
       e.preventDefault();
-        if (this.email && this.password) {
+
+        // destring the email and password from the form data object
+        const { email, password } = this.formData;
+
+        if (email && password) {
           // make a post request to the server using fetch
-          fetch("http://localhost:3000/login", {
+          fetch("api/login", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
             },
 
             body: JSON.stringify({
-              email: this.email,
-              password: this.password,
+              email: email,
+              password: password,
             }),
           })
-            .then((response) => response.json())
-            .then((data) => {
-             console.log(data);
-              this.$router.push("/dashboard");
+            .then((response) => {
+              if (response.ok) {
+                // if the response is ok, redirect to the dashboard
+                this.$router.push("/dashboard");
+              }
+
+              if (!response.ok) {
+                // if the response is not ok, return the error from the server
+                console.log(response.statusText);
+                // push the error to the errors array
+                const error:string = response.statusText;
+                return response.json();
+              }
+              // if the response is not ok, return the error from the server
+              console.log(response.statusText);
+              return response.json();
+             
             })
             .catch((error) => {
-              alert(error.message);
-            });
+              console.log(error);
+            });       
         }
       },
-
-    openForgotPassword() {
-      // open forgot password modal
-    },
   },
 };
 </script>
+    
+    <style scoped>
+    .warning {
+      color: red;
+    }
+    </style>
   

@@ -1,8 +1,10 @@
 class AuthErrors extends Error {
-    constructor(message, statusCode) {
-        super(message);
+    constructor(message, status) {
+        super();
+        Error.captureStackTrace(this, this.constructor);
+        this.name = this.constructor.name;
         this.message = message;
-        this.statusCode = statusCode;
+        this.status = status;
     }
 
     // signup errors

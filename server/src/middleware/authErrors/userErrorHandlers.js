@@ -4,8 +4,7 @@ const { AuthErrors } = require('../../utils/errorHandlers/authErrors');
 exports.handleLoginError = (err, req, res, next) => {
   try {
     if (err instanceof AuthErrors) {
-      res.status(err.statusCode).json(err.message);
-      return;
+      return res.status(err.status).json(err);
     }
   } catch (err) {
     next(err);

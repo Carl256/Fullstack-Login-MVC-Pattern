@@ -32,10 +32,7 @@ body {
     width: 90%;
     margin: 0 auto;
     position: relative;
-
-    @media (max-width: 480px) {
-      top: 10vh;
-    }
+    top: 10vh;
 
     @media (min-width: 576px) {
       width: 90%;

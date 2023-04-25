@@ -1,0 +1,68 @@
+/* Shared CSS classes */
+@import "../colorVariables";
+@import "../sizingVariables";
+
+.notification {
+    width: 90%;
+    margin: 0 auto;
+    position: relative;
+    top: 10vh;
+
+    &__content{
+    padding: 0 $spacing-medium;
+    margin: $spacing-medium 0;
+    background-color: $color-button-error;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    }
+  
+    &__text {
+      font-size: $font-size-medium;
+      font-weight: bold;
+      color: $color-white;
+    }
+  
+    &__close-btn {
+      font-size: $font-size-medium;
+      font-weight: bold;
+      color: #333;
+      background-color: inherit;
+      border: 1px solid #333;
+      margin-left: $spacing-medium;
+      border-radius: 4px;
+      cursor: pointer;
+  
+      &:hover {
+        transform: scale(1.1);
+      }
+    }
+
+    @media (min-width: 576px) {
+        width: 90%;
+        max-width: 540px;
+        margin: 0 auto;
+        top: 10vh;
+      }
+  
+      @media (min-width: 768px) {
+        width: 60%;
+        max-width: 720px;
+        margin: 0 auto;
+      }
+  
+      @media (min-width: 992px) {
+        width: 35%;
+        max-width: 960px;
+        margin: 0 auto;
+      }
+  
+      @media (min-width: 1200px) {
+        width: 25%;
+        max-width: 1140px;
+        margin: 0 auto;
+      }
+  }
+  

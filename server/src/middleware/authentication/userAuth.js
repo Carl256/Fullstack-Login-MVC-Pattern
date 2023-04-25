@@ -39,12 +39,13 @@ exports.authenticateUserLogin = async (req, res, next) => {
       throw AuthErrors.invalidPassword("Invalid password");
     }
 
-    // return the information including token as JSON
+    // Create a token
     const token = generateToken(user);
     return res.status(200).json({ token });
+
   } catch (error) {
-    next(error);
-    return;
+    // Handle errors
+    return next(error);
   }
 };
 
