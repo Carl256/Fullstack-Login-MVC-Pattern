@@ -1,12 +1,8 @@
 <template>
   <div class="container">
-    <!-- v if -->
-    <div class="notification" v-if="errors.length>0">
-      <div class="notification__content">
-          <p v-for="error in errors" :key="error" class="notification__text">{{ error.message }}</p>
-          <button class="notification__close-btn" @click="errors=[]">X</button>
-        </div>
-    </div>
+
+
+    <Notification v-if="hasNotification" :errors="errors" :message="message" @close="closeNotification" />
 
     <div class="container__wrapper">
       <div class="card card--white">
@@ -37,71 +33,63 @@
   
 <script lang="ts">
 import { defineComponent } from "vue";
-//import the createUser function from the eventService
 import { createUser } from "../services/eventService";
+import { ResponseErrors, ResponseMessage, FormData } from "../interfaces/errors";
+import Notification from "./shared/Notifications.vue";
 
 export default defineComponent({
   name: "SignUpForm",
+  components: {
+    Notification,
+  },
   data() {
     return {
-      // an empty array to store the errors
-      errors: [{} = {}] = [],
+      errors: [] as ResponseErrors[],
+      message: {} as ResponseMessage,
       email: "",
       password: "",
       confirmPassword: "",
     };
   },
-
-
+  computed: {
+    hasNotification(): boolean {
+      return this.errors.length > 0 || Object.keys(this.message).length > 0;
+    },
+  },
   methods: {
-    handleSubmit(e: Event) {
 
-      const data = {
-        email: this.email,
-        password: this.password,
-        confirmPassword: this.confirmPassword,
-      };
+    async handleSubmit(e: Event) {
       e.preventDefault();
-
 
       // check if the passwords match
       if (this.password !== this.confirmPassword) {
         alert("Passwords do not match");
+        return;
       }
 
-      if (this.password === this.confirmPassword) {
-        createUser(data, this.errors)
+      try {
+        const data: FormData = {
+          email: this.email,
+          password: this.password,
+          confirmPassword: this.confirmPassword,
+        };
+        await createUser(data, { errors: this.errors, message: this.message });
+
+        // clear the form
+        this.email = "";
+        this.password = "";
+        this.confirmPassword = "";
+
+      } catch (error) {
+        console.error(error);
       }
 
+    },
 
-      // } else {
-      //   // make a post request to the server using fetch
-      //   fetch("api/signup", requestOptions)
-      //   .then(async (response) => {
-      //     const data = await response.json();
-
-      //     // check for error response
-      //     if (!response.ok) {
-      //       // get error message from body or default to response status
-      //       const error = (data && data.message) || response.status;
-      //       return Promise.reject(error);
-      //     }
-
-      //     // if the response is ok, redirect to the login page
-      //     // if(response.ok) {
-      //     //   this.$router.push("/login");
-      //     // }
-      //   })
-      //   .then((data) => {
-      //     console.log(data);
-      //     this.$router.push("/login");
-      //   })
-      //   .catch((error) => {
-      //     this.errorMessage = error;
-      //     console.error("There was is  an error!", error);
-      //   });
-
-      // }
+    // create the close notification button
+    closeNotification() {
+      this.errors = [];
+      this.message = {} as ResponseMessage;
     },
   },
 });
