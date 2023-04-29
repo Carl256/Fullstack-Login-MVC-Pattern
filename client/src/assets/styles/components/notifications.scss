@@ -38,6 +38,10 @@
       &:hover {
         transform: scale(1.1);
       }
+
+      &--bg-success {
+        background-color: $color-success;
+      }
     }
 
     @media (min-width: 576px) {
