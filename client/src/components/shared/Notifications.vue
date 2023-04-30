@@ -1,11 +1,11 @@
 <template>
     <div class="notification" v-if="hasContent">
-      <div class="notification__content">
+      <div class="notification__content" :class="[hasMessage?'notification__content--bg-success':'notification__content--bg-error']">
         <div v-if="hasErrors">
-          <p v-for="error in errors" :key="error" class="notification__text">{{ error.message }}</p>
+          <p v-for="error in errors" :key="error" class="notification__text">{{ error }}</p>
         </div>
-        <p v-else-if="hasMessage" class="notification__text">{{ message.message }}</p>
-        <p v-else class="notification__text">{{ defaultText }}</p>
+        <p v-else-if="hasMessage" class="notification__text">{{ message.message}}</p>
+        <!-- <p v-else class="notification__text">{{ defaultText }}</p> -->
         <button class="notification__close-btn" @click="closeNotification">X</button>
       </div>
     </div>
@@ -18,19 +18,16 @@
   export default defineComponent({
     name: 'Notification',
     props: {
-      errors: {
+      errors:{
         type: Array as PropType<ResponseErrors[]>,
-        default: () => [],
+        default: [],
       },
       message: {
         type: Object as PropType<ResponseMessage>,
-        default: () => ({}),
-      },
-      defaultText: {
-        type: String,
-        default: 'No notification message',
+        default: {},
       },
     },
+
     computed: {
       hasErrors(): boolean {
         return this.errors.length > 0;
@@ -42,6 +39,7 @@
         return this.hasErrors || this.hasMessage;
       },
     },
+
     methods: {
       closeNotification(): void {
         this.$emit('close');

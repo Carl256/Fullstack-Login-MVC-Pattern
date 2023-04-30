@@ -11,12 +11,17 @@
     &__content{
     padding: 0 $spacing-medium;
     margin: $spacing-medium 0;
-    background-color: $color-button-error;
     border-radius: 4px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     display: flex;
     align-items: center;
     justify-content: space-between;
+    }
+    &__content--bg-success {
+      background-color: $color-success;
+    }
+    &__content--bg-error {
+      background-color: $color-error;
     }
   
     &__text {
@@ -28,19 +33,15 @@
     &__close-btn {
       font-size: $font-size-medium;
       font-weight: bold;
-      color: #333;
+      color: $color-white;
       background-color: inherit;
-      border: 1px solid #333;
+      border: 1px solid $color-white;;
       margin-left: $spacing-medium;
       border-radius: 4px;
       cursor: pointer;
   
       &:hover {
         transform: scale(1.1);
-      }
-
-      &--bg-success {
-        background-color: $color-success;
       }
     }
 

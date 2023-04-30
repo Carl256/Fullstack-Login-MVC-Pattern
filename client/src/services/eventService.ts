@@ -5,7 +5,7 @@ async function getAllUsers() {
     return await response.json();
 }
 
-const createUser = async (data: FormData, { errors = [], message }: { errors: ResponseErrors[], message: ResponseMessage }) =>
+const createUser = async (data: FormData, errorResponse:ResponseErrors[], messageResponse: ResponseMessage) =>
   {
   const requestOptions = {
     method: "post",
@@ -21,16 +21,17 @@ const createUser = async (data: FormData, { errors = [], message }: { errors: Re
 
     if (!response.ok) {
       const error = await response.json() as ResponseErrors;
-      errors.push(error);
+      errorResponse.push(error);
     }
 
     // is the response ok?
     if (response.ok) {
-      // convert the response to json
-      const data = await response.json();
-      // return the json data
-      message = data;
-      return data;
+      // get the json data from the response
+      const message = await response.json() as ResponseMessage;
+      // push the message to the messageResponse array
+      // assign the message to the messageResponse object
+      messageResponse.message = message.message;
+      return messageResponse;
     }
   } catch (error) {
     // if there is an error, return the error

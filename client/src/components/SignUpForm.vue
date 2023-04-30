@@ -1,7 +1,5 @@
 <template>
   <div class="container">
-
-
     <Notification v-if="hasNotification" :errors="errors" :message="message" @close="closeNotification" />
 
     <div class="container__wrapper">
@@ -39,9 +37,11 @@ import Notification from "./shared/Notifications.vue";
 
 export default defineComponent({
   name: "SignUpForm",
+
   components: {
     Notification,
   },
+
   data() {
     return {
       errors: [] as ResponseErrors[],
@@ -51,13 +51,14 @@ export default defineComponent({
       confirmPassword: "",
     };
   },
+
   computed: {
     hasNotification(): boolean {
       return this.errors.length > 0 || Object.keys(this.message).length > 0;
     },
   },
+  
   methods: {
-
     async handleSubmit(e: Event) {
       e.preventDefault();
 
@@ -73,9 +74,9 @@ export default defineComponent({
           password: this.password,
           confirmPassword: this.confirmPassword,
         };
-        await createUser(data, { errors: this.errors, message: this.message });
+        await createUser(data, this.errors, this.message);
 
-        // clear the form
+        // // clear the form
         this.email = "";
         this.password = "";
         this.confirmPassword = "";
