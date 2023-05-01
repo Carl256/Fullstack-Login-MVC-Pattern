@@ -2,12 +2,12 @@
 interface FormData {
     email: string;
     password: string;
-    confirmPassword: string;
+    confirmPassword?: string;
   }
 
 interface ResponseErrors {
     message: string;
-    status: number;
+    status?: number;
   }
 
 // create a response message interface

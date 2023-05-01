@@ -64,7 +64,7 @@ export default defineComponent({
 
       // check if the passwords match
       if (this.password !== this.confirmPassword) {
-        alert("Passwords do not match");
+        this.errors = [{ message: "Password does not match" }];
         return;
       }
 
@@ -74,17 +74,20 @@ export default defineComponent({
           password: this.password,
           confirmPassword: this.confirmPassword,
         };
-        await createUser(data, this.errors, this.message);
-
-        // // clear the form
+        await createUser(data, this.errors, this.message)
+      
         this.email = "";
         this.password = "";
         this.confirmPassword = "";
 
+        //wait 3 seconds and then redirect to the login page
+        setTimeout(() => {
+          this.$router.push({ name: "login" });
+        }, 1000);
+
       } catch (error) {
         console.error(error);
       }
-
     },
 
     // create the close notification button

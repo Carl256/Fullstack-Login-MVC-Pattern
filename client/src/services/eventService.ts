@@ -16,7 +16,7 @@ const createUser = async (data: FormData, errorResponse:ResponseErrors[], messag
   };
 
   try {
-    // we use api because of the proxy in vite.config.ts
+    // we use api because of the proxy in vite.config.ts to prevent exposing the port of the backend
     const response = await fetch(`api/signup`, requestOptions);
 
     if (!response.ok) {
@@ -24,11 +24,9 @@ const createUser = async (data: FormData, errorResponse:ResponseErrors[], messag
       errorResponse.push(error);
     }
 
-    // is the response ok?
     if (response.ok) {
       // get the json data from the response
       const message = await response.json() as ResponseMessage;
-      // push the message to the messageResponse array
       // assign the message to the messageResponse object
       messageResponse.message = message.message;
       return messageResponse;

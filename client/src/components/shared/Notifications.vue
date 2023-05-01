@@ -2,7 +2,7 @@
     <div class="notification" v-if="hasContent">
       <div class="notification__content" :class="[hasMessage?'notification__content--bg-success':'notification__content--bg-error']">
         <div v-if="hasErrors">
-          <p v-for="error in errors" :key="error" class="notification__text">{{ error }}</p>
+          <p v-for="error in errors" :key="error" class="notification__text">{{ error.message }}</p>
         </div>
         <p v-else-if="hasMessage" class="notification__text">{{ message.message}}</p>
         <!-- <p v-else class="notification__text">{{ defaultText }}</p> -->
@@ -37,6 +37,9 @@
       },
       hasContent(): boolean {
         return this.hasErrors || this.hasMessage;
+      },
+      passwordDoesNotMatch(): boolean {
+        return this.errors.some((error) => error.message === 'Password does not match');
       },
     },
 

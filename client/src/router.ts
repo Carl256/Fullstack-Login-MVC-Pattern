@@ -18,6 +18,7 @@ const routes = [
   {
     path: '/login',
     component: LoginForm,
+    name: 'login',
   },
   {
     path: '/forgot-password',
