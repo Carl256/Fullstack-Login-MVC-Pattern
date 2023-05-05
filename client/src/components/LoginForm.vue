@@ -1,5 +1,7 @@
 <template>
   <div class="container">
+    <Notification v-if="hasNotification" :errors="errors" @close="closeNotification" />
+
     <div class="container__wrapper">
       <div class="card card--white">
         <div class="card__content">
@@ -7,23 +9,11 @@
             <h1 class="form__title">App Name Login</h1>
             <div class="form__field">
               <label class="form__label" for="email">Email</label>
-              <input
-                class="form__input"
-                type="email"
-                id="email"
-                v-model="formData.email"
-                required
-              />
+              <input class="form__input" type="email" id="email" v-model.trim="email" required />
             </div>
             <div class="form__field">
               <label class="form__label" for="password">Password</label>
-              <input
-                class="form__input"
-                type="password"
-                id="password"
-                v-model="formData.password"
-                required
-              />
+              <input class="form__input" type="password" id="password" v-model.trim="password" required />
             </div>
             <button class="form__button" type="submit">Login</button>
 
@@ -32,9 +22,7 @@
             </div>
 
             <div class="links">
-              <router-link to="/sign-up"
-                >Don't have an account? Sign up here.</router-link
-              >
+              <router-link to="/sign-up">Don't have an account? Sign up here.</router-link>
             </div>
           </form>
         </div>
@@ -43,67 +31,66 @@
   </div>
 </template>
   
-  <script lang="ts">
-export default {
+<script lang="ts">
+import { defineComponent } from "vue";
+import { loginUser } from "../services/eventService";
+import { ResponseErrors, ResponseMessage, FormData } from "../interfaces/errors";
+import Notification from "./shared/Notifications.vue";
+
+export default defineComponent({
+  name: "LoginForm",
+
+  components: {
+    Notification,
+  },
   data() {
     return {
-      formData: {
-        email: "",
-        password: "",
-      },
-      errors:[]
+      email: "",
+      password: "",
+      errors: [] as ResponseErrors[],
     };
   },
+
+  computed: {
+    hasNotification(): boolean {
+      return this.errors.length > 0;
+    },
+  },
   methods: {
-    handleSubmit(e: Event) {
+    async handleSubmit(e: Event) {
       e.preventDefault();
 
-        // destring the email and password from the form data object
-        const { email, password } = this.formData;
+      if (!this.email && !this.password) {
+        this.errors = [{ message: "Please fill out all fields." }];
+      }
 
-        if (email && password) {
-          // make a post request to the server using fetch
-          fetch("api/login", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
+      try {
+          const data: FormData = {
+            email: this.email,
+            password: this.password,
+          };
 
-            body: JSON.stringify({
-              email: email,
-              password: password,
-            }),
-          })
-            .then((response) => {
-              if (response.ok) {
-                // if the response is ok, redirect to the dashboard
-                this.$router.push("/dashboard");
-              }
+          const successFulLogin = await loginUser(data, this.errors);
 
-              if (!response.ok) {
-                // if the response is not ok, return the error from the server
-                console.log(response.statusText);
-                // push the error to the errors array
-                const error:string = response.statusText;
-                return response.json();
-              }
-              // if the response is not ok, return the error from the server
-              console.log(response.statusText);
-              return response.json();
-             
-            })
-            .catch((error) => {
-              console.log(error);
-            });       
+          this.email = "";
+          this.password = "";
+
+          //wait 3 seconds and then redirect to the login page
+          setTimeout(() => {
+            this.$router.push({ name: "dashboard" });
+          }, 500);
+
+          return;
+
+        } catch (err) {
+          return err;
         }
-      },
+    },
+
+    closeNotification() {
+      this.errors = [];
+    },
   },
-};
-</script>
-    
-    <style scoped>
-    .warning {
-      color: red;
-    }
-    </style>
+});
+</script>  
   

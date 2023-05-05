@@ -38,9 +38,6 @@
       hasContent(): boolean {
         return this.hasErrors || this.hasMessage;
       },
-      passwordDoesNotMatch(): boolean {
-        return this.errors.some((error) => error.message === 'Password does not match');
-      },
     },
 
     methods: {

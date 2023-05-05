@@ -31,6 +31,7 @@ const routes = [
   {
     path: '/dashboard',
     component: UserView,
+    name: 'dashboard',
   }
 ];
 

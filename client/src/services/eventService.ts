@@ -10,7 +10,6 @@ const createUser = async (data: FormData, errorResponse:ResponseErrors[], messag
   const requestOptions = {
     method: "post",
     headers: { "Content-Type": "application/json",
-    "Access-Control-Allow-Origin": "*"
   },
     body: JSON.stringify(data),
   };
@@ -22,6 +21,7 @@ const createUser = async (data: FormData, errorResponse:ResponseErrors[], messag
     if (!response.ok) {
       const error = await response.json() as ResponseErrors;
       errorResponse.push(error);
+      return;
     }
 
     if (response.ok) {
@@ -37,14 +37,32 @@ const createUser = async (data: FormData, errorResponse:ResponseErrors[], messag
   }
 }
 
- async function loginUser(data: any) {
-    const response = await fetch(`/api/user/login`, {
+const loginUser = async (data: any, errorResponse:ResponseErrors[]) => {
+    const requestOptions = await fetch(`/api/login`, {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({user: data})
+        body: JSON.stringify(data)
       })
-    return await response.json();
+
+      try{
+        const response = await requestOptions.json();
+        
+        if(!response.ok){
+          const error = await response.json() as ResponseErrors;
+          errorResponse.push(error);
+          console.log(errorResponse);
+          return;
+        }
+
+        if(response.ok){
+          const message = await response.json() as ResponseMessage;
+          return message;
+        }
+      }catch(error){
+        return error;
+      }
 }
+     
 
 // export the functions
 export { getAllUsers, createUser, loginUser };

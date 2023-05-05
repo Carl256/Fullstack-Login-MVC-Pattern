@@ -28,13 +28,20 @@ exports.authenticateUserLogin = async (req, res, next) => {
     // Find user with matching email
     const user = await User.findOne({ email });
 
+
     // Check if user exists
     if (!user) {
       throw AuthErrors.userNotFound("User not found");
     }
 
+    
     // Check if user's password matches hashed password in database
     const passwordMatch = await bcrypt.compare(password, user.password);
+    
+
+
+    // if the passwords don't match, throw an error
+
     if (!passwordMatch) {
       throw AuthErrors.invalidPassword("Invalid password");
     }

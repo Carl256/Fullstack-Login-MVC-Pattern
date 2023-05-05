@@ -57,7 +57,7 @@ export default defineComponent({
       return this.errors.length > 0 || Object.keys(this.message).length > 0;
     },
   },
-  
+
   methods: {
     async handleSubmit(e: Event) {
       e.preventDefault();
@@ -74,16 +74,19 @@ export default defineComponent({
           password: this.password,
           confirmPassword: this.confirmPassword,
         };
-        await createUser(data, this.errors, this.message)
-      
-        this.email = "";
-        this.password = "";
-        this.confirmPassword = "";
 
-        //wait 3 seconds and then redirect to the login page
-        setTimeout(() => {
-          this.$router.push({ name: "login" });
-        }, 1000);
+        await createUser(data, this.errors, this.message)
+
+        //if there are no errors, clear the form and redirect to the login page
+        if (this.errors.length === 0 && data) {
+          this.clearForm();
+
+          //wait 3 seconds and then redirect to the login page
+          setTimeout(() => {
+            this.$router.push({ name: "login" });
+          }, 1000);
+        }
+        this.clearForm()
 
       } catch (error) {
         console.error(error);
@@ -94,6 +97,13 @@ export default defineComponent({
     closeNotification() {
       this.errors = [];
       this.message = {} as ResponseMessage;
+    },
+
+    //clear the form
+    clearForm() {
+      this.email = "";
+      this.password = "";
+      this.confirmPassword = "";
     },
   },
 });
