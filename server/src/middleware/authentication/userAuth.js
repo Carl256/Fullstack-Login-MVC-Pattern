@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 const User = require("../../models/user");
 const { AuthErrors } = require("../../utils/errorHandlers/authErrors");
 const { loginSanitizationRules } = require("../sanitazation/sanitizeInput");
-const { validationResult } = require("express-validator");
+const { validationResult, Result } = require("express-validator");
 
 // Generate a JWT token for the user
 const generateToken = (user) => {
@@ -28,27 +28,25 @@ exports.authenticateUserLogin = async (req, res, next) => {
     // Find user with matching email
     const user = await User.findOne({ email });
 
-
     // Check if user exists
     if (!user) {
       throw AuthErrors.userNotFound("User not found");
     }
 
-    
     // Check if user's password matches hashed password in database
     const passwordMatch = await bcrypt.compare(password, user.password);
     
-
-
     // if the passwords don't match, throw an error
-
     if (!passwordMatch) {
+      console.log(passwordMatch)
       throw AuthErrors.invalidPassword("Invalid password");
     }
 
     // Create a token
+    if (passwordMatch) {
     const token = generateToken(user);
     return res.status(200).json({ token });
+    }
 
   } catch (error) {
     // Handle errors

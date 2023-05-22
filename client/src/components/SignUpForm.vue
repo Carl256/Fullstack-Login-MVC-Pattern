@@ -86,6 +86,7 @@ export default defineComponent({
             this.$router.push({ name: "login" });
           }, 1000);
         }
+
         this.clearForm()
 
       } catch (error) {

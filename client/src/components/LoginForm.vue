@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <Notification v-if="hasNotification" :errors="errors" @close="closeNotification" />
+    <Notification v-if="hasNotification" :errors="errors" :message="message" @close="closeNotification" />
 
     <div class="container__wrapper">
       <div class="card card--white">
@@ -48,6 +48,7 @@ export default defineComponent({
       email: "",
       password: "",
       errors: [] as ResponseErrors[],
+      message: {} as ResponseMessage,
     };
   },
 
@@ -75,11 +76,13 @@ export default defineComponent({
           this.email = "";
           this.password = "";
 
-          //wait 3 seconds and then redirect to the login page
+          //if the errors are empty then redirect to the dashboard
+          if(!this.errors){
+            //wait 3 seconds and then redirect to the login page
           setTimeout(() => {
             this.$router.push({ name: "dashboard" });
           }, 500);
-
+          }
           return;
 
         } catch (err) {
