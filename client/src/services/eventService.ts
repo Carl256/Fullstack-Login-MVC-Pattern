@@ -62,7 +62,33 @@ const loginUser = async (data: any, errorResponse:ResponseErrors[]) => {
         return error;
       }
 }
-     
+
+// password reset
+const resetPassword = async (data: any, errorResponse:ResponseErrors[]) => {
+  const requestOptions = await fetch(`/api/password-reset`, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(data)
+    })
+
+    try{
+      const response = await requestOptions.json();
+      
+      if(!response.ok){
+        const error = await response.json() as ResponseErrors;
+        errorResponse.push(error);
+        console.log(errorResponse);
+        return;
+      }
+
+      if(response.ok){
+        const message = await response.json() as ResponseMessage;
+        return message;
+      }
+    }catch(error){
+      return error;
+    }
+}
 
 // export the functions
-export { getAllUsers, createUser, loginUser };
+export { getAllUsers, createUser, resetPassword, loginUser };

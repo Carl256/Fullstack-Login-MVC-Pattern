@@ -1,7 +1,7 @@
 // Define the interface of the object
 interface FormData {
     email: string;
-    password: string;
+    password?: string;
     confirmPassword?: string;
   }
 

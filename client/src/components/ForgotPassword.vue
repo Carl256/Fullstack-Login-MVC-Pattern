@@ -30,19 +30,51 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
+import { ResponseErrors, FormData } from "../interfaces/errors";
+import { resetPassword } from "../services/eventService";
 
 export default defineComponent({
   name: "ForgotPassword",
 
   data() {
     return {
+      errors: [] as ResponseErrors[],
       email: "",
     };
   },
 
   methods: {
-    async submitForm() {
-      // Submit the form to the server and handle the response
+    async handleSubmit(e: Event) {
+      e.preventDefault();
+
+      if (!this.email ) {
+        this.errors = [{ message: "Please fill out all fields." }];
+      }
+
+      try {
+          const data: FormData = {
+            email: this.email,
+          };
+
+          await resetPassword(data, this.errors);
+          this.email = "";
+
+          //if the errors are empty then redirect to the dashboard
+          if(!this.errors){
+            //wait 3 seconds and then redirect to the login page
+          setTimeout(() => {
+            this.$router.push({ name: "login" });
+          }, 500);
+          }
+          return;
+
+        } catch (err) {
+          return err;
+        }
+    },
+
+    closeNotification() {
+      this.errors = [];
     },
   },
 });
