@@ -4,6 +4,7 @@ const User = require("../../models/user");
 const { AuthErrors } = require("../../utils/errorHandlers/authErrors");
 const { loginSanitizationRules } = require("../sanitazation/sanitizeInput");
 const { validationResult, Result } = require("express-validator");
+const nodemailer = require("nodemailer");
 
 // Generate a JWT token for the user
 const generateToken = (user) => {
@@ -95,5 +96,77 @@ exports.authenticateUserSignup = async (req, res, next) => {
     return next(error);
   }
 };
+
+exports.resetUserPassword = async (req, res, next) => {
+  // create a new password reset token
+  // send email to user with password reset link
+  // user clicks link and is redirected to password reset page
+  // user enters new password and submits
+  // password is updated in database
+  // user is redirected to login page
+  // user logs in with new password
+  // user is redirected to dashboard
+
+  try {
+    // get user's email from request body
+    const { email } = req.body;
+
+    // check if user exists
+    const userExists = await User.findOne({ email });
+
+    // if user doesn't exist, throw an error
+    if (!userExists) {
+      throw AuthErrors.userNotFound("User not found");
+    }
+
+
+
+    // if user exists, create a new password reset token
+    const passwordResetToken = jwt.sign(
+      { userId: userExists._id },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: "15m",
+        algorithm: "HS256",
+      }
+    );
+
+    // send email to user with password reset link
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.EMAIL_ADDRESS,
+        pass: process.env.EMAIL_PASSWORD,
+      },
+    });
+
+    const mailOptions = {
+      from: process.env.EMAIL_ADDRESS,
+      to: email,
+      subject: "Password Reset",
+      text: `Click the link below to reset your password: \n\n
+      http://localhost:3000/reset-password/${passwordResetToken}`,
+    };
+
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        throw AuthErrors.badRequest("Error sending email");
+      } else {
+        console.log("Email sent: " + info.response);
+      }
+    }
+    );
+
+    // return success message
+    return res.status(200).json({
+      success: true,
+      message: "Password reset link sent to email",
+    });
+    
+  } catch (error) {
+    return next(error);
+  }
+};
+
 
 exports.sanitizeLoginInput = loginSanitizationRules();

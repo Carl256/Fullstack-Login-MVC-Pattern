@@ -20,3 +20,12 @@ exports.signupService = async (req, res, next) => {
     next(error);
   }
 };
+
+exports.passwordResetService = async (req, res, next) => {
+  try {
+    // call the passwordReset middleware to reset the user's password
+    return await resetUserPassword(req, res, next);
+  } catch (error) {
+    next(error);
+  }
+};
